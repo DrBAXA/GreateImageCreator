@@ -3,8 +3,6 @@ package com.dv.image;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
-
 import static java.lang.Math.abs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -48,9 +46,9 @@ public class ColorTest {
         assertTrue(c1.hashCode() == c2.hashCode());
     }
 
-    @Test
+    /*@Test
     public void randomHashCodeTest(){
-        HashSet<Integer> hash = new HashSet<Integer>(26777216, 1.99f);
+        HashSet<Integer> hash = new HashSet<>(26777216, 1.99f);
 
         for (int i = 0; i < 256; i++) {
             for (int j = 0; j < 256; j++) {
@@ -62,7 +60,7 @@ public class ColorTest {
         }
         System.out.println(hash.size());
         assertTrue(16777216 - hash.size() < 100);
-    }
+    }*/
 
     @Test(timeout = 1000)
     public void hashCodeTimeTest(){
