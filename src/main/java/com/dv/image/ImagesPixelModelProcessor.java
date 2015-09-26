@@ -33,7 +33,7 @@ public abstract class ImagesPixelModelProcessor {
     protected Optional<ImagePixelModel> processSingleImage(String fileName){
         try {
             Optional<ImagePixelModel> o = Optional.of(new ImagePixelModel(resolution, fileName));
-            logger.debug("Processing file " + fileName + " succesfully finished.");
+            logger.debug("Processing file " + fileName + " successfully finished.");
             return o;
         }catch (Exception e){
             logger.error("Error during processing file " + fileName + ". File will be skipped. " + e.getMessage());
