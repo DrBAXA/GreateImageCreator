@@ -13,6 +13,7 @@ public class ImageCreator {
     private BufferedImage destImage;
     private File destImageFile;
     private Graphics graphics;
+    private String[][] usageArray;
 
     private ImagesPixelModelProcessor processor;
 
@@ -22,6 +23,7 @@ public class ImageCreator {
         this.resolution = resolution;
         destImage = new BufferedImage(srcImage.getWidth()/resolution*60, srcImage.getHeight()/resolution*60, BufferedImage.TYPE_INT_RGB);
         graphics = destImage.getGraphics();
+        usageArray = new String[srcImage.getHeight()/resolution][srcImage.getWidth()/resolution];
     }
 
     public void create() throws IOException, InterruptedException {
@@ -46,8 +48,9 @@ public class ImageCreator {
         ImageIO.write(destImage, "jpg", destImageFile);
     }
 
-    private void write(BufferedImage img, int x, int y){
+    private synchronized void write(String key, BufferedImage img, int x, int y){
         graphics.drawImage(img.getScaledInstance(60, 60, Image.SCALE_SMOOTH), x * 60, y * 60, null);
+        usageArray[y][x] = key;
     }
 
     protected ImagePixelModel getPixels(int x, int y){
@@ -98,19 +101,31 @@ public class ImageCreator {
 
         @Override
         public void run() {
-            int counter = 0;
             for (int i = y*length; i < srcImage.getWidth()/resolution && i < (y+1)*length; i++) {
                 for (int j = 0; j < srcImage.getHeight() / resolution; j++) {
-                    BufferedImage partialImage = null;
+                    BufferedImage partialImage;
                     try {
-                        partialImage = ImageIO.read(new File(processor.getMostAppropriate(getPixels(i, j), counter++)));
+                        String file = processor.getMostAppropriate(getPixels(i, j));
+                        partialImage = ImageIO.read(new File(file));
                         partialImage = getSquareImage(partialImage);
-                        write(partialImage, i, j);
+                        write(file, partialImage, i, j);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
+        }
+    }
+
+    public boolean isUsed(String key, int x, int y){
+        int minX = x-2 > 0 ? x-2 : 0;
+        int minY = y-2 > 0 ? y-2 : 0;
+
+        int maxX = x+2 > 0 ? x-2 : 0;
+        int minY = y-2 > 0 ? y-2 : 0;
+
+        for (int i = 0; i <; i++) {
+
         }
     }
 }
