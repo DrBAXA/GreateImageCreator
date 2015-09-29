@@ -40,7 +40,7 @@ public class ImageCreator {
         Thread[] threads = new Thread[4];
 
         for (int i = 0; i < 4; i++) {
-            threads[i] = new Thread(new ImageRunner(1, (srcImage.getWidth()/resolution)/4));
+            threads[i] = new Thread(new ImageRunner(i, (srcImage.getWidth()/resolution)/4));
             threads[i].start();
         }
 
@@ -81,9 +81,9 @@ public class ImageCreator {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ImagesPixelModelProcessor processor = new ImagesPixelModelDirectoryProcessor(1, "/home/vdanyliuk/Завантаження/1");
+        ImagesPixelModelProcessor processor = new ImagesPixelModelDirectoryProcessor(2, "/home/vdanyliuk/1");
         processor.process();
-        ImageCreator ic = new ImageCreator("/home/vdanyliuk/Завантаження/2.jpg", "/home/vdanyliuk/Завантаження/2_.jpg", 1);
+        ImageCreator ic = new ImageCreator("/home/vdanyliuk/2.jpg", "/home/vdanyliuk/2_.jpg", 2);
         ic.setProcessor(processor);
         ic.create();
     }
