@@ -15,12 +15,10 @@ import static java.lang.Math.round;
 public class ImagePixelModel implements Serializable{
 
     private int resolution;
-    private String fileName;
     private Color[][] matrix;
 
     public ImagePixelModel(int resolution, String fileName) throws IOException {
         this.resolution = resolution;
-        this.fileName = fileName;
         this.matrix = new Color[resolution][resolution];
         BufferedImage image = ImageIO.read(new File(fileName));
         process(image);
@@ -43,8 +41,10 @@ public class ImagePixelModel implements Serializable{
     protected Color calcBlockColor(BufferedImage image, int x, int y){
         int r = 0, g = 0, b = 0;
         float k = 0;
-        for(int i = x*image.getHeight()/resolution; i < (x+1)*image.getHeight()/resolution && i < image.getHeight(); i++){
-            for(int j = y*image.getWidth()/resolution; j < (y+1)*image.getWidth()/resolution && y < image.getWidth(); j++){
+        int partHeight = image.getHeight()/resolution;
+        int partWidth = image.getWidth()/resolution;
+        for(int i = x*partHeight; i < (x+1)*partHeight && i < image.getHeight(); i++){
+            for(int j = y*partWidth; j < (y+1)*partWidth && y < image.getWidth(); j++){
                 int rgb = image.getRGB(j,i);
                 r += getRed(rgb);
                 g += getGreen(rgb);

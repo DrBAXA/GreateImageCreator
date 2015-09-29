@@ -44,7 +44,9 @@ public abstract class ImagesPixelModelProcessor {
         long min = Long.MAX_VALUE;
         String result = null;
         for (Map.Entry<String, ImagePixelModel> entry : modelMap.entrySet()) {
-            long diff = pm.compare(entry.getValue()) * (usagesCountMap.get(entry.getKey())+1)*(usagesCountMap.get(entry.getKey())+1);
+            int usagesCount = usagesCountMap.get(entry.getKey());
+            long usageCoefficient = (usagesCount+1)*(usagesCount+1);
+            long diff = pm.compare(entry.getValue()) * usageCoefficient;
             if (diff < min) {
                 min = diff;
                 result = entry.getKey();
