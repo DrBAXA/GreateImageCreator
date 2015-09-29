@@ -1,21 +1,14 @@
 package com.dv.image;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 public class ImageCreator {
 
-    private static final Logger logger = LogManager.getLogger();
-
     private int resolution;
-    private Collection<String> pixelFiles;
     private BufferedImage srcImage;
     private BufferedImage destImage;
     private File destImageFile;
@@ -27,7 +20,7 @@ public class ImageCreator {
         this.srcImage = ImageIO.read(new File(sourceImage));
         destImageFile = new File(destinationImage);
         this.resolution = resolution;
-        destImage = new BufferedImage(srcImage.getWidth()/resolution*60, srcImage.getHeight()/resolution*60, BufferedImage.TYPE_INT_RGB);
+        destImage = new BufferedImage(srcImage.getWidth()/resolution*32, srcImage.getHeight()/resolution*32, BufferedImage.TYPE_INT_RGB);
         graphics = destImage.getGraphics();
     }
 
@@ -49,16 +42,12 @@ public class ImageCreator {
         }
     }
 
-    private void runThreads(){
-
-    }
-
     private void writeFile() throws IOException {
         ImageIO.write(destImage, "jpg", destImageFile);
     }
 
     private void write(BufferedImage img, int x, int y){
-        graphics.drawImage(img.getScaledInstance(60,60,Image.SCALE_SMOOTH), x*60, y*60, null);
+        graphics.drawImage(img.getScaledInstance(32, 32, Image.SCALE_SMOOTH), x * 32, y * 32, null);
     }
 
     protected ImagePixelModel getPixels(int x, int y){
@@ -88,6 +77,15 @@ public class ImageCreator {
         ic.create();
     }
 
+    private BufferedImage getSquareImage(BufferedImage rawImage){
+        int minValue = rawImage.getHeight() < rawImage.getWidth() ? rawImage.getHeight() : rawImage.getWidth();
+        BufferedImage result = new BufferedImage(minValue, minValue, BufferedImage.TYPE_INT_RGB);
+
+        result.getGraphics().drawImage(rawImage, 0,0,minValue, minValue, new java.awt.Color(0,0,0), null);
+
+        return result;
+    }
+
     private class ImageRunner implements Runnable{
 
         private int y;
@@ -105,6 +103,7 @@ public class ImageCreator {
                     BufferedImage partialImage = null;
                     try {
                         partialImage = ImageIO.read(new File(processor.getMostAppropriate(getPixels(i, j))));
+                        partialImage = getSquareImage(partialImage);
                         write(partialImage, i, j);
                     } catch (IOException e) {
                         e.printStackTrace();

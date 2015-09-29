@@ -41,10 +41,11 @@ public class ImagePixelModel implements Serializable{
     protected Color calcBlockColor(BufferedImage image, int x, int y){
         int r = 0, g = 0, b = 0;
         float k = 0;
-        int partHeight = image.getHeight()/resolution;
-        int partWidth = image.getWidth()/resolution;
-        for(int i = x*partHeight; i < (x+1)*partHeight && i < image.getHeight(); i++){
-            for(int j = y*partWidth; j < (y+1)*partWidth && y < image.getWidth(); j++){
+        int minValue = image.getHeight() < image.getWidth() ? image.getHeight() : image.getWidth();
+        int partSize = minValue/resolution;
+
+        for(int i = x*partSize; i < (x+1)*partSize; i++){
+            for(int j = y*partSize; j < (y+1)*partSize; j++){
                 int rgb = image.getRGB(j,i);
                 r += getRed(rgb);
                 g += getGreen(rgb);

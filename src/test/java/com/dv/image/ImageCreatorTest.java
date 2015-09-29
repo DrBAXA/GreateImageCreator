@@ -17,4 +17,11 @@ public class ImageCreatorTest {
 
         assertArrayEquals(matrix1, ic.getPixels(2,1).getMatrix());
     }
+
+    @Test
+    public void getSquareTest() throws IOException {
+        ImageCreator ic = new ImageCreator("8x8.png", "some.png", 2);
+
+
+    }
 }
