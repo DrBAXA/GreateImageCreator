@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import static com.dv.image.ColorUtil.getBlue;
+import static com.dv.image.ColorUtil.getGreen;
+import static com.dv.image.ColorUtil.getRed;
 import static java.lang.Math.round;
 
 public class ImagePixelModel implements Serializable{
@@ -21,6 +24,12 @@ public class ImagePixelModel implements Serializable{
         this.matrix = new Color[resolution][resolution];
         BufferedImage image = ImageIO.read(new File(fileName));
         process(image);
+    }
+
+    public ImagePixelModel(int resolution, Color[][] matrix){
+        if(resolution != matrix.length || resolution != matrix[0].length) throw new IllegalArgumentException("Matrix resolution and given is different!");
+        this.resolution = resolution;
+        this.matrix = matrix;
     }
 
     protected void process(BufferedImage image){
@@ -46,22 +55,6 @@ public class ImagePixelModel implements Serializable{
         return new Color(round(r / k), round(g / k), round(b / k));
     }
 
-    public static Color getColor(int color){
-        return new Color(getRed(color), getGreen(color), getBlue(color));
-    }
-
-    public static int getRed(int color){
-        return (color & 0x00FF0000) >> (4*4);
-    }
-
-    public static int getGreen(int color){
-        return (color & 0x0000FF00) >> (2*4);
-    }
-
-    public static int getBlue(int color){
-        return (color & 0x000000FF);
-    }
-
     public Color[][] getMatrix() {
         return matrix;
     }
@@ -74,7 +67,6 @@ public class ImagePixelModel implements Serializable{
         ImagePixelModel that = (ImagePixelModel) o;
 
         return resolution == that.resolution
-                && fileName.equals(that.fileName)
                 && Arrays.deepEquals(matrix, that.matrix);
 
     }
@@ -82,7 +74,6 @@ public class ImagePixelModel implements Serializable{
     @Override
     public int hashCode() {
         int result = resolution;
-        result = 31 * result + fileName.hashCode();
         result = 31 * result + Arrays.deepHashCode(matrix);
         return result;
     }
@@ -92,10 +83,10 @@ public class ImagePixelModel implements Serializable{
         if(this.equals(o)) return 0;
         if(this.resolution != o.resolution) throw new IllegalArgumentException();
 
-        int diff = 0;
+        long diff = 0;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j <matrix[0].length; j++) {
-                int colorDiff = matrix[i][j].compareTo(o.matrix[i][j]);
+                long colorDiff = Math.abs(matrix[i][j].compareTo(o.matrix[i][j]));
                 diff += colorDiff*colorDiff;
             }
         }

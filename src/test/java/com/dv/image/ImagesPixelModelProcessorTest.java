@@ -1,5 +1,6 @@
 package com.dv.image;
 
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,9 +18,13 @@ public class ImagesPixelModelProcessorTest {
 
     ImagesPixelModelProcessor processor;
     Collection<String> images;
+    ImagePixelModel imagePixelModel;
 
     @Before
     public void init(){
+        imagePixelModel = new ImagePixelModel(2, new Color[][] {{new Color(190, 128, 64), new Color(50, 75, 75)},
+                                                                {new Color(100, 150, 150), new Color(25,38, 38)}});
+
         processor = mock(ImagesPixelModelProcessor.class, Mockito.CALLS_REAL_METHODS);
 
         images = new ArrayList<>();
@@ -32,7 +37,8 @@ public class ImagesPixelModelProcessorTest {
 
         when(processor.getImages()).thenReturn(images);
 
-        processor.setResolution(4);
+        processor.setResolution(2);
+        processor.process();
     }
 
     @Test
@@ -43,8 +49,13 @@ public class ImagesPixelModelProcessorTest {
 
     @Test
     public void processTest(){
-        assertEquals(5, processor.process().size());
-        assertEquals(4, processor.process().get("8x8.png").getMatrix().length);
+        assertEquals(5, processor.getModelMap().size());
+        assertEquals(2, processor.getModelMap().get("8x8.png").getMatrix().length);
+    }
+
+    @Test
+    public void getMostAppropriateTest(){
+        TestCase.assertEquals("8x8.png", processor.getMostAppropriate(imagePixelModel));
     }
 
 

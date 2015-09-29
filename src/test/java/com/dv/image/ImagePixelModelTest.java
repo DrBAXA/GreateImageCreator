@@ -27,14 +27,14 @@ public class ImagePixelModelTest {
         int color6 = 0x00010000;
         int color7 = 0x00100000;
 
-        assertEquals(0, ImagePixelModel.getRed(color0));
-        assertEquals(170, ImagePixelModel.getRed(color1));
-        assertEquals(170, ImagePixelModel.getRed(color2));
-        assertEquals(255, ImagePixelModel.getRed(color3));
-        assertEquals(160, ImagePixelModel.getRed(color4));
-        assertEquals(17, ImagePixelModel.getRed(color5));
-        assertEquals(1, ImagePixelModel.getRed(color6));
-        assertEquals(16, ImagePixelModel.getRed(color7));
+        assertEquals(0, ColorUtil.getRed(color0));
+        assertEquals(170, ColorUtil.getRed(color1));
+        assertEquals(170, ColorUtil.getRed(color2));
+        assertEquals(255, ColorUtil.getRed(color3));
+        assertEquals(160, ColorUtil.getRed(color4));
+        assertEquals(17, ColorUtil.getRed(color5));
+        assertEquals(1, ColorUtil.getRed(color6));
+        assertEquals(16, ColorUtil.getRed(color7));
     }
 
     @Test
@@ -48,14 +48,14 @@ public class ImagePixelModelTest {
         int color6 = 0x00010000;
         int color7 = 0x00100000;
 
-        assertEquals(0, ImagePixelModel.getGreen(color0));
-        assertEquals(0, ImagePixelModel.getGreen(color1));
-        assertEquals(255, ImagePixelModel.getGreen(color2));
-        assertEquals(0, ImagePixelModel.getGreen(color3));
-        assertEquals(0, ImagePixelModel.getGreen(color4));
-        assertEquals(0, ImagePixelModel.getGreen(color5));
-        assertEquals(0, ImagePixelModel.getGreen(color6));
-        assertEquals(0, ImagePixelModel.getGreen(color7));
+        assertEquals(0, ColorUtil.getGreen(color0));
+        assertEquals(0, ColorUtil.getGreen(color1));
+        assertEquals(255, ColorUtil.getGreen(color2));
+        assertEquals(0, ColorUtil.getGreen(color3));
+        assertEquals(0, ColorUtil.getGreen(color4));
+        assertEquals(0, ColorUtil.getGreen(color5));
+        assertEquals(0, ColorUtil.getGreen(color6));
+        assertEquals(0, ColorUtil.getGreen(color7));
     }
 
     @Test
@@ -69,14 +69,14 @@ public class ImagePixelModelTest {
         int color6 = 0x00010000;
         int color7 = 0x00100011;
 
-        assertEquals(0, ImagePixelModel.getBlue(color0));
-        assertEquals(16, ImagePixelModel.getBlue(color1));
-        assertEquals(0, ImagePixelModel.getBlue(color2));
-        assertEquals(170, ImagePixelModel.getBlue(color3));
-        assertEquals(105, ImagePixelModel.getBlue(color4));
-        assertEquals(0, ImagePixelModel.getBlue(color5));
-        assertEquals(0, ImagePixelModel.getBlue(color6));
-        assertEquals(17, ImagePixelModel.getBlue(color7));
+        assertEquals(0, ColorUtil.getBlue(color0));
+        assertEquals(16, ColorUtil.getBlue(color1));
+        assertEquals(0, ColorUtil.getBlue(color2));
+        assertEquals(170, ColorUtil.getBlue(color3));
+        assertEquals(105, ColorUtil.getBlue(color4));
+        assertEquals(0, ColorUtil.getBlue(color5));
+        assertEquals(0, ColorUtil.getBlue(color6));
+        assertEquals(17, ColorUtil.getBlue(color7));
     }
 
     @Test
@@ -84,6 +84,6 @@ public class ImagePixelModelTest {
         int res = 0X00FFAA66;
         Color expect = new Color(255, 170, 102);
 
-        assertEquals(expect, ImagePixelModel.getColor(res));
+        assertEquals(expect, ColorUtil.getColor(res));
     }
 }

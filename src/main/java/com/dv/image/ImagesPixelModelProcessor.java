@@ -3,16 +3,20 @@ package com.dv.image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class ImagesPixelModelProcessor {
 
     private static final Logger logger = LogManager.getLogger();
 
     private int resolution;
+
+    public Map<String, ImagePixelModel> getModelMap() {
+        return modelMap;
+    }
+
+    private Map<String, ImagePixelModel> modelMap;
 
     public ImagesPixelModelProcessor(int resolution) {
         this.resolution = resolution;
@@ -21,12 +25,25 @@ public abstract class ImagesPixelModelProcessor {
     abstract public Collection<String> getImages();
 
     public final Map<String, ImagePixelModel> process(){
-        HashMap<String, ImagePixelModel> result = new HashMap<>();
+        modelMap = new TreeMap<>();
 
         getImages()
-                .stream()
-                    .forEach((fileName) -> processSingleImage(fileName).ifPresent((val) -> result.put(fileName, val)));
+                .parallelStream()
+                    .forEach((fileName) -> processSingleImage(fileName).ifPresent((val) -> modelMap.put(fileName, val)));
 
+        return modelMap;
+    }
+
+    public String getMostAppropriate(ImagePixelModel pm){
+        long min = Long.MAX_VALUE;
+        String result = null;
+        for (Map.Entry<String, ImagePixelModel> entry : modelMap.entrySet()){
+            long diff = pm.compare(entry.getValue());
+            if(diff < min){
+                min = diff;
+                result = entry.getKey();
+            }
+        }
         return result;
     }
 
