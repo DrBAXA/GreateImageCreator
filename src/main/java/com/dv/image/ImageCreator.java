@@ -20,7 +20,7 @@ public class ImageCreator {
         this.srcImage = ImageIO.read(new File(sourceImage));
         destImageFile = new File(destinationImage);
         this.resolution = resolution;
-        destImage = new BufferedImage(srcImage.getWidth()/resolution*32, srcImage.getHeight()/resolution*32, BufferedImage.TYPE_INT_RGB);
+        destImage = new BufferedImage(srcImage.getWidth()/resolution*60, srcImage.getHeight()/resolution*60, BufferedImage.TYPE_INT_RGB);
         graphics = destImage.getGraphics();
     }
 
@@ -47,7 +47,7 @@ public class ImageCreator {
     }
 
     private void write(BufferedImage img, int x, int y){
-        graphics.drawImage(img.getScaledInstance(32, 32, Image.SCALE_SMOOTH), x * 32, y * 32, null);
+        graphics.drawImage(img.getScaledInstance(60, 60, Image.SCALE_SMOOTH), x * 60, y * 60, null);
     }
 
     protected ImagePixelModel getPixels(int x, int y){
@@ -98,11 +98,12 @@ public class ImageCreator {
 
         @Override
         public void run() {
+            int counter = 0;
             for (int i = y*length; i < srcImage.getWidth()/resolution && i < (y+1)*length; i++) {
                 for (int j = 0; j < srcImage.getHeight() / resolution; j++) {
                     BufferedImage partialImage = null;
                     try {
-                        partialImage = ImageIO.read(new File(processor.getMostAppropriate(getPixels(i, j))));
+                        partialImage = ImageIO.read(new File(processor.getMostAppropriate(getPixels(i, j), counter++)));
                         partialImage = getSquareImage(partialImage);
                         write(partialImage, i, j);
                     } catch (IOException e) {

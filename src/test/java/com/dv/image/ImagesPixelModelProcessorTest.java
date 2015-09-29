@@ -55,8 +55,10 @@ public class ImagesPixelModelProcessorTest {
 
     @Test
     public void getMostAppropriateTest(){
-        TestCase.assertEquals("8x8.png", processor.getMostAppropriate(imagePixelModel));
+        TestCase.assertEquals("8x8.png", processor.getMostAppropriate(imagePixelModel, 0));
     }
+
+
 
 
 }
